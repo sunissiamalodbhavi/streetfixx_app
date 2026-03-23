@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "277157151346",
+    "project_id": "streetfixx-51e6b",
+    "storage_bucket": "streetfixx-51e6b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:277157151346:android:2d602c20dd3c9d983f78eb",
+        "android_client_info": {
+          "package_name": "com.example.streetfixx_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbkeuQONyDgZaTwtoiH1J5Iiq0Vu13OUA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
