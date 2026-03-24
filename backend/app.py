@@ -673,6 +673,32 @@ def save_fcm_token():
         conn.close()
         return jsonify({"error": str(e)}), 500
 
+@app.route('/create-admin', methods=['GET'])
+def create_admin():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Check if admin already exists (prevent duplicates)
+    cursor.execute("SELECT * FROM users WHERE email = ?", ("admin@mcc.edu.in",))
+    existing_admin = cursor.fetchone()
+
+    if existing_admin:
+        conn.close()
+        return {"message": "Admin already exists"}
+
+    hashed_password = generate_password_hash("123456")
+
+    cursor.execute("""
+        INSERT INTO users (name, email, password_hash, role)
+        VALUES (?, ?, ?, ?)
+    """, ("Admin", "admin@mcc.edu.in", hashed_password, "admin"))
+
+    conn.commit()
+    conn.close()
+
+    return {"message": "Admin created successfully"}
+
 if __name__ == '__main__':
-    # Run on 0.0.0.0 to be accessible from emulator/device
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    # Run on 0.0.0.0 to be accessible from emulator/device/Render
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)

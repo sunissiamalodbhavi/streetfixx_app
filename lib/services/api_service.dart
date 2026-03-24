@@ -22,33 +22,31 @@ class ApiService {
   
   Future<http.Response> _get(String url) async {
     await _checkConnectivity();
-    debugPrint('🔵 GET Request: $url');
+    print("API CALL → $url");
     try {
       final response = await http.get(Uri.parse(url)).timeout(timeoutDuration);
-      debugPrint('🟢 GET Response [${response.statusCode}]: $url');
+      print("STATUS → ${response.statusCode}");
+      print("BODY → ${response.body}");
       
       if (response.statusCode >= 200 && response.statusCode < 300) {
         return response;
       } else {
-        debugPrint('🔴 GET Error Response Body: ${response.body}');
         throw Exception('Server error: ${response.statusCode}');
       }
     } on TimeoutException {
-      debugPrint('🔴 GET Request timed out: $url');
-      throw Exception('Request timed out. Server is unreachable.');
+      throw Exception("Server waking up, please wait...");
     } on SocketException {
-      debugPrint('🔴 GET Socket error: $url');
-      throw Exception('No internet / server unreachable.');
+      throw Exception("No internet or server unreachable");
+    } on Exception catch (e) {
+      throw Exception("Unexpected error: $e");
     } catch (e) {
-      debugPrint('🔴 GET Exception: $e');
-      throw Exception('Error: $e');
+      throw Exception("Unexpected error: $e");
     }
   }
 
   Future<http.Response> _post(String url, Map<String, dynamic> body) async {
     await _checkConnectivity();
-    debugPrint('🔵 POST Request: $url');
-    debugPrint('   Body: $body');
+    print("API CALL → $url");
     try {
       final response = await http.post(
         Uri.parse(url),
@@ -56,30 +54,28 @@ class ApiService {
         body: jsonEncode(body),
       ).timeout(timeoutDuration);
       
-      debugPrint('🟢 POST Response [${response.statusCode}]: $url');
+      print("STATUS → ${response.statusCode}");
+      print("BODY → ${response.body}");
       
       if (response.statusCode >= 200 && response.statusCode < 300) {
         return response;
       } else {
-        debugPrint('🔴 POST Error Response Body: ${response.body}');
         throw Exception('Server error: ${response.body}');
       }
     } on TimeoutException {
-      debugPrint('🔴 POST Request timed out: $url');
-      throw Exception('Request timed out. Server is unreachable.');
+      throw Exception("Server waking up, please wait...");
     } on SocketException {
-      debugPrint('🔴 POST Socket error: $url');
-      throw Exception('No internet / server unreachable.');
+      throw Exception("No internet or server unreachable");
+    } on Exception catch (e) {
+      throw Exception("Unexpected error: $e");
     } catch (e) {
-      debugPrint('🔴 POST Exception: $e');
-      throw Exception('Error: $e');
+      throw Exception("Unexpected error: $e");
     }
   }
 
   Future<http.Response> _put(String url, Map<String, dynamic> body) async {
     await _checkConnectivity();
-    debugPrint('🔵 PUT Request: $url');
-    debugPrint('   Body: $body');
+    print("API CALL → $url");
     try {
       final response = await http.put(
         Uri.parse(url),
@@ -87,50 +83,48 @@ class ApiService {
         body: jsonEncode(body),
       ).timeout(timeoutDuration);
       
-      debugPrint('🟢 PUT Response [${response.statusCode}]: $url');
+      print("STATUS → ${response.statusCode}");
+      print("BODY → ${response.body}");
       
       if (response.statusCode >= 200 && response.statusCode < 300) {
         return response;
       } else {
-        debugPrint('🔴 PUT Error Response Body: ${response.body}');
         throw Exception('Server error: ${response.body}');
       }
     } on TimeoutException {
-      debugPrint('🔴 PUT Request timed out: $url');
-      throw Exception('Request timed out. Server is unreachable.');
+      throw Exception("Server waking up, please wait...");
     } on SocketException {
-      debugPrint('🔴 PUT Socket error: $url');
-      throw Exception('No internet / server unreachable.');
+      throw Exception("No internet or server unreachable");
+    } on Exception catch (e) {
+      throw Exception("Unexpected error: $e");
     } catch (e) {
-      debugPrint('🔴 PUT Exception: $e');
-      throw Exception('Error: $e');
+      throw Exception("Unexpected error: $e");
     }
   }
 
   Future<http.Response> _multipartPost(http.MultipartRequest request) async {
     await _checkConnectivity();
-    debugPrint('🔵 MULTIPART POST Request: ${request.url}');
+    print("API CALL → ${request.url}");
     try {
       final streamedsResponse = await request.send().timeout(timeoutDuration);
       final response = await http.Response.fromStream(streamedsResponse);
       
-      debugPrint('🟢 MULTIPART POST Response [${response.statusCode}]: ${request.url}');
+      print("STATUS → ${response.statusCode}");
+      print("BODY → ${response.body}");
       
       if (response.statusCode >= 200 && response.statusCode < 300) {
         return response;
       } else {
-        debugPrint('🔴 MULTIPART Error Response Body: ${response.body}');
         throw Exception('Server error: ${response.body}');
       }
     } on TimeoutException {
-      debugPrint('🔴 MULTIPART Request timed out: ${request.url}');
-      throw Exception('Request timed out. Server is unreachable.');
+      throw Exception("Server waking up, please wait...");
     } on SocketException {
-      debugPrint('🔴 MULTIPART Socket error: ${request.url}');
-      throw Exception('No internet / server unreachable.');
+      throw Exception("No internet or server unreachable");
+    } on Exception catch (e) {
+      throw Exception("Unexpected error: $e");
     } catch (e) {
-      debugPrint('🔴 MULTIPART Exception: $e');
-      throw Exception('Error: $e');
+      throw Exception("Unexpected error: $e");
     }
   }
 
@@ -182,7 +176,7 @@ class ApiService {
     File? imageFile,
     required String reporterType,
   }) async {
-    var request = http.MultipartRequest('POST', Uri.parse('$baseUrl/citizen/report-issue'));
+    var request = http.MultipartRequest('POST', Uri.parse('$baseUrl/report-issue'));
     
     request.fields['user_id'] = userId.toString();
     request.fields['title'] = title;
